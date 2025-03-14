@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqb7wkq53mug2"]
+
+[ext_resource type="Script" path="res://scripts/food.gd" id="1_jdj55"]
+[ext_resource type="Texture2D" uid="uid://cddwoc5bultxg" path="res://assets/good3.png" id="2_36j75"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_58hma"]
+radius = 1897.34
+height = 4824.24
+
+[node name="Food" type="Area2D"]
+scale = Vector2(0.0877572, 0.0877572)
+collision_layer = 2
+script = ExtResource("1_jdj55")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -4)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("2_36j75")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+scale = Vector2(0.210204, 0.237863)
+shape = SubResource("CapsuleShape2D_58hma")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

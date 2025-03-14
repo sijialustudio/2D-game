@@ -1,0 +1,243 @@
+[gd_scene load_steps=24 format=3 uid="uid://dm5wop745jvr4"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_cl7k0"]
+[ext_resource type="Texture2D" uid="uid://2dyohgjg3rfa" path="res://assets/background.jpg" id="1_jx5ku"]
+[ext_resource type="Script" path="res://scripts/bubu.gd" id="1_usgc6"]
+[ext_resource type="Texture2D" uid="uid://bhuk2iv3mofli" path="res://assets/bubu.png" id="2_vq3bs"]
+[ext_resource type="Script" path="res://scripts/food_spawner.gd" id="3_od0gl"]
+[ext_resource type="PackedScene" uid="uid://cwueybgvt4eq7" path="res://scenes/food.tscn" id="4_lxrig"]
+[ext_resource type="PackedScene" uid="uid://b7seeawya17l0" path="res://scenes/food2.tscn" id="5_0da4j"]
+[ext_resource type="PackedScene" uid="uid://42mi6d5xp85u" path="res://scenes/bad_food_scene.tscn" id="6_0tm3h"]
+[ext_resource type="PackedScene" uid="uid://cqb7wkq53mug2" path="res://scenes/food3.tscn" id="6_trtra"]
+[ext_resource type="Script" path="res://scripts/dudu.gd" id="8_gr8tl"]
+[ext_resource type="Texture2D" uid="uid://b0kdu41w2xl1b" path="res://assets/image.png" id="9_13fax"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xo2qp"]
+radius = 71.0
+height = 166.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_53lut"]
+size = Vector2(140, 94)
+
+[sub_resource type="Animation" id="Animation_2nnid"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_0yd5l"]
+resource_name = "cut"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.3, 0.3), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bkfog"]
+_data = {
+"RESET": SubResource("Animation_2nnid"),
+"cut": SubResource("Animation_0yd5l")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_tp1s2"]
+font_size = 40
+
+[sub_resource type="Animation" id="Animation_q6r3h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.752941, 0.0313726, 0.243137, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_3sh6i"]
+resource_name = "heal"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.01, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.752941, 0.0313726, 0.243137, 0), Color(0, 0.486275, 0.27451, 1), Color(0, 0.486275, 0.27451, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ehuhi"]
+resource_name = "hurt"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.01, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.752941, 0.0313726, 0.243137, 0), Color(0.752941, 0.0313726, 0.243137, 1), Color(0.752941, 0.0313726, 0.243137, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xa708"]
+_data = {
+"RESET": SubResource("Animation_q6r3h"),
+"heal": SubResource("Animation_3sh6i"),
+"hurt": SubResource("Animation_ehuhi")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0frqn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qfajo"]
+bg_color = Color(7.46027e-07, 0.54669, 0.167454, 1)
+
+[node name="Main" type="Node2D"]
+position = Vector2(2, 0)
+script = ExtResource("1_cl7k0")
+
+[node name="Background" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(666, 168)
+scale = Vector2(0.507676, 0.224947)
+texture = ExtResource("1_jx5ku")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.752941, 0.0313726, 0.243137, 1)
+
+[node name="Bubu" type="CharacterBody2D" parent="."]
+position = Vector2(152, 461)
+collision_mask = 2
+script = ExtResource("1_usgc6")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bubu"]
+position = Vector2(-3, -24)
+scale = Vector2(0.359341, 0.359341)
+texture = ExtResource("2_vq3bs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bubu"]
+position = Vector2(0, -36)
+shape = SubResource("CapsuleShape2D_xo2qp")
+
+[node name="CutTimer" type="Timer" parent="Bubu"]
+
+[node name="DuduPosition" type="Marker2D" parent="Bubu"]
+position = Vector2(106, -24)
+
+[node name="FoodSpawner" type="Node2D" parent="."]
+script = ExtResource("3_od0gl")
+good_food_scenes = Array[PackedScene]([ExtResource("4_lxrig"), ExtResource("5_0da4j"), ExtResource("6_trtra")])
+bad_food_scene = ExtResource("6_0tm3h")
+spawn_rate = 1.0
+
+[node name="SpawnTimer" type="Timer" parent="FoodSpawner"]
+wait_time = 0.9
+autostart = true
+
+[node name="Dudu" type="Node2D" parent="."]
+position = Vector2(-92, -105)
+script = ExtResource("8_gr8tl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Dudu"]
+position = Vector2(-4, -24)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_13fax")
+
+[node name="Area2D" type="Area2D" parent="Dudu"]
+position = Vector2(18, 9)
+collision_layer = 3
+collision_mask = 3
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Dudu/Area2D"]
+position = Vector2(60, -11)
+shape = SubResource("RectangleShape2D_53lut")
+
+[node name="DuduAnimation" type="AnimationPlayer" parent="Dudu"]
+libraries = {
+"": SubResource("AnimationLibrary_bkfog")
+}
+
+[node name="Timer" type="Timer" parent="Dudu"]
+wait_time = 5.0
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer"]
+offset_left = 2.0
+offset_right = 414.0
+offset_bottom = 30.0
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 18
+step = 1.0
+value = 100.0
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 800.0
+offset_right = 841.145
+offset_bottom = 23.0
+size_flags_horizontal = 4
+text = "health"
+metadata/_edit_lock_ = true
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer"]
+offset_left = 920.0
+offset_top = -1.0
+offset_right = 1071.0
+offset_bottom = 54.0
+text = "Score: 0"
+label_settings = SubResource("LabelSettings_tp1s2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xa708")
+}
+
+[node name="dudu_original_position" type="Marker2D" parent="."]
+position = Vector2(133, -160)
+
+[node name="CutBar" type="ProgressBar" parent="."]
+offset_left = 8.0
+offset_top = 41.0
+offset_right = 245.0
+offset_bottom = 68.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0frqn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qfajo")
+max_value = 4.0
+step = 1.0
+value = 4.0
+show_percentage = false
+
+[connection signal="area_entered" from="Dudu/Area2D" to="Dudu" method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="Dudu/Area2D" to="Dudu" method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="Dudu/Timer" to="Dudu" method="_on_timer_timeout"]

@@ -1,0 +1,76 @@
+[gd_scene load_steps=8 format=3 uid="uid://42mi6d5xp85u"]
+
+[ext_resource type="Script" path="res://scripts/bad_food_scene.gd" id="1_4giji"]
+[ext_resource type="Texture2D" uid="uid://b0rce652ls8l5" path="res://assets/bad.png" id="2_fu8gb"]
+[ext_resource type="Texture2D" uid="uid://b0kdu41w2xl1b" path="res://assets/image.png" id="3_g2xis"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_58hma"]
+radius = 304.877
+height = 1719.59
+
+[sub_resource type="Animation" id="Animation_xrwkq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_usefc"]
+resource_name = "die"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u1cyy"]
+_data = {
+"RESET": SubResource("Animation_xrwkq"),
+"die": SubResource("Animation_usefc")
+}
+
+[node name="Food" type="Area2D" groups=["bad_food"]]
+scale = Vector2(0.0877572, 0.0877572)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_4giji")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -4)
+texture = ExtResource("2_fu8gb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+scale = Vector2(2.37142, 1.11793)
+shape = SubResource("CapsuleShape2D_58hma")
+
+[node name="Bubu" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1538.34, 11.3951)
+scale = Vector2(4.34437, 5.9112)
+texture = ExtResource("3_g2xis")
+flip_h = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u1cyy")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
